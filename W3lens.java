@@ -147,6 +147,8 @@ public class W3LensGUI {
 
             BigDecimal btcAmount = MonetaryFormat.BTC.format(new BigDecimal(tx.getValue(wallet).toPlainString()));
             outputTextArea.append("Received " + btcAmount + " BTC at " + bitcoinAddress + "\n");
+
+            addToCosmosDB(bitcoinAddress, "Bitcoin");
         });
 
         walletAppKit.wallet().addCoinsSentEventListener((wallet, tx, prevBalance, newBalance) -> {
@@ -159,6 +161,8 @@ public class W3LensGUI {
 
             BigDecimal btcAmount = MonetaryFormat.BTC.format(new BigDecimal(tx.getValue(wallet).toPlainString()));
             outputTextArea.append("Sent " + btcAmount + " BTC from " + bitcoinAddress + "\n");
+
+            addToCosmosDB(bitcoinAddress, "Bitcoin");
         });
 
         walletAppKit.wallet().addCoinsReceivedEventListener((wallet, tx, prevBalance, newBalance) -> {
@@ -179,7 +183,7 @@ public class W3LensGUI {
     }
 
     private static void monitorEthereum() {
-        Web3j web3j = Web3j.build(new HttpService("https://mainnet.infura.io/v3/your-infura-project-id"));
+        Web3j web3j = Web3j.build(new HttpService("https://mainnet.infura.io/v3/5107317f1f2848b28d6a7de8d058cb68"));
 
         web3j.blockFlowable(false).subscribe(ethBlock -> {
             EthBlock.Block block = ethBlock.getBlock();
@@ -196,6 +200,8 @@ public class W3LensGUI {
 
                 BigDecimal ethAmount = new BigDecimal(transaction.getValue()).divide(BigDecimal.TEN.pow(18));
                 outputTextArea.append("Received " + ethAmount + " ETH at " + ethereumAddress + "\n");
+
+                addToCosmosDB(ethereumAddress, "Ethereum");
             }
         });
     }
@@ -243,4 +249,3 @@ public class W3LensGUI {
         }
     }
 }
-
